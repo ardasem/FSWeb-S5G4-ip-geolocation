@@ -1,6 +1,8 @@
 //axios import buraya gelecek
+import axios from "axios";
 
 var benimIP;
+let data;
 
 
 // ------------ değiştirmeyin --------------
@@ -17,8 +19,49 @@ async function ipAdresimiAl(){
 	})
 	.then(function (a) {
 		benimIP=a
+	 axios({
+			method: 'get',
+			url: `https://apis.ergineer.com/ipgeoapi/${benimIP}`
+		})
+		.then(function (response) {
+			return response.data
+		})
+		.then(function (a) {
+			data=a
+			console.log(data)
+			showInfo(data)
+		
+		});
+	
 	});
-}				
+
+	
+}		
+
+
+async function showInfo(object){
+
+let infoCard = document.createElement('div');
+
+infoCard.innerHTML = `<div class="card">
+<img src=${object.ulkebayragi} />
+<div class="card-info">
+	<h3 class="ip">${object.sorgu}</h3>
+	<p class="ulke">${object.ulke}</p>
+	<p>Enlem: ${object.enlem} Boylam: ${object.boylam}</p>
+	<p>Şehir: {${object.sehir}}</p>
+	<p>Saat dilimi: ${object.saatdilimi} </p>
+	<p>Para birimi: ${object.parabirimi} </p>
+	<p>ISP: ${object.isp}</p>
+</div>
+</div>`
+document.body.appendChild(infoCard);
+}		
+
+ipAdresimiAl();
+
+
+
 // ------------ değiştirmeyin --------------
 
 
